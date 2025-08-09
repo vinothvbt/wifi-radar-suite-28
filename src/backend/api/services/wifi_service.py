@@ -295,7 +295,10 @@ class WiFiService:
     async def _scan_with_iwlist(self, interface: str) -> List[AccessPoint]:
         """Perform scan using iwlist command (fallback)"""
         try:
-            cmd = ['sudo', 'iwlist', interface, 'scan']
+            if os.geteuid() != 0:
+                logger.error("WiFi scan requires root privileges. Please run the service as root.")
+                return []
+            cmd = ['iwlist', interface, 'scan']
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             
             if result.returncode == 0:

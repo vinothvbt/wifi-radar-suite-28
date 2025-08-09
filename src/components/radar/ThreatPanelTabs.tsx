@@ -20,8 +20,7 @@ import {
   Settings,
   Bug,
   Sword,
-  Crosshair,
-  Radar
+  Crosshair
 } from 'lucide-react';
 
 interface ThreatPanelTabsProps {
@@ -155,65 +154,6 @@ export const ThreatPanelTabs: React.FC<ThreatPanelTabsProps> = ({ selectedAP, on
 
               <Separator />
 
-              {/* Aggressive Reconnaissance Actions */}
-              <div className="space-y-3">
-                <h4 className="font-semibold flex items-center gap-2">
-                  <Crosshair className="h-4 w-4" />
-                  Advanced Reconnaissance
-                </h4>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-xs h-8"
-                    onClick={() => alert('Getting MAC details...')}
-                  >
-                    <Activity className="h-3 w-3 mr-1" />
-                    MAC Details
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-xs h-8"
-                    onClick={() => alert('Deep scanning...')}
-                  >
-                    <Radar className="h-3 w-3 mr-1" />
-                    Deep Scan
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-xs h-8"
-                    onClick={() => alert('Probing clients...')}
-                  >
-                    <Wifi className="h-3 w-3 mr-1" />
-                    Client Probe
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-xs h-8"
-                    onClick={() => alert('Signal analysis...')}
-                  >
-                    <Target className="h-3 w-3 mr-1" />
-                    Signal Intel
-                  </Button>
-                </div>
-                
-                <Button 
-                  variant="destructive" 
-                  size="sm" 
-                  className="w-full text-xs"
-                  onClick={() => alert('Initiating aggressive fingerprinting...')}
-                >
-                  <Sword className="h-3 w-3 mr-1" />
-                  Aggressive Fingerprint
-                </Button>
-              </div>
-
-              <Separator />
-
               {/* Threat Assessment */}
               <div className="space-y-2">
                 <h4 className="font-semibold flex items-center gap-2">
@@ -305,73 +245,9 @@ export const ThreatPanelTabs: React.FC<ThreatPanelTabsProps> = ({ selectedAP, on
                             CVE: {vuln.cve}
                           </div>
                         )}
-
-                        {/* Detailed Vulnerability Information */}
-                        <div className="space-y-2 mt-3">
-                          <div className="text-xs space-y-1">
-                            <div className="font-semibold">CVSS Score:</div>
-                            <div className="font-mono text-muted-foreground">
-                              {vuln.severity === 'CRITICAL' ? '9.0-10.0' :
-                               vuln.severity === 'HIGH' ? '7.0-8.9' :
-                               vuln.severity === 'MEDIUM' ? '4.0-6.9' : '0.1-3.9'}
-                            </div>
-                          </div>
-                          
-                          <div className="text-xs space-y-1">
-                            <div className="font-semibold">Attack Vector:</div>
-                            <div className="text-muted-foreground">
-                              {vuln.type.includes('WPS') ? 'Network Adjacent' :
-                               vuln.type.includes('WEP') ? 'Network Adjacent' :
-                               vuln.type.includes('Management') ? 'Network Adjacent' : 'Remote'}
-                            </div>
-                          </div>
-
-                          <div className="text-xs space-y-1">
-                            <div className="font-semibold">Exploitation Complexity:</div>
-                            <div className="text-muted-foreground">
-                              {vuln.severity === 'CRITICAL' ? 'Low' :
-                               vuln.severity === 'HIGH' ? 'Low' :
-                               vuln.severity === 'MEDIUM' ? 'Medium' : 'High'}
-                            </div>
-                          </div>
-
-                          <div className="text-xs space-y-1">
-                            <div className="font-semibold">Potential Impact:</div>
-                            <div className="text-muted-foreground">
-                              {vuln.type.includes('WPS') ? 'Complete network compromise' :
-                               vuln.type.includes('WEP') ? 'Traffic interception and injection' :
-                               vuln.type.includes('Management') ? 'Client disconnection and MitM' : 
-                               'Information disclosure'}
-                            </div>
-                          </div>
-
-                          <div className="text-xs space-y-1">
-                            <div className="font-semibold">Common Exploits:</div>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {vuln.type.includes('WPS') ? (
-                                <>
-                                  <Badge variant="outline" className="text-xs">Reaver</Badge>
-                                  <Badge variant="outline" className="text-xs">Bully</Badge>
-                                  <Badge variant="outline" className="text-xs">PixieWPS</Badge>
-                                </>
-                              ) : vuln.type.includes('WEP') ? (
-                                <>
-                                  <Badge variant="outline" className="text-xs">Aircrack-ng</Badge>
-                                  <Badge variant="outline" className="text-xs">ChopChop</Badge>
-                                  <Badge variant="outline" className="text-xs">Fragmentation</Badge>
-                                </>
-                              ) : (
-                                <>
-                                  <Badge variant="outline" className="text-xs">Aireplay-ng</Badge>
-                                  <Badge variant="outline" className="text-xs">mdk3</Badge>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
                         
-                        <div className="space-y-1 mt-3">
-                          <div className="text-xs font-semibold">Remediation Steps:</div>
+                        <div className="space-y-1">
+                          <div className="text-xs font-semibold">Recommendations:</div>
                           <ul className="text-xs space-y-0.5">
                             {vuln.recommendations.map((rec, recIndex) => (
                               <li key={recIndex} className="list-disc list-inside text-muted-foreground">

@@ -76,18 +76,18 @@ export default function ScanPage() {
   };
 
   const refreshScanResults = useCallback(async () => {
-    if (!lastScanId || !selectedInterface) return;
+    if (!lastScanId) return;
     
     try {
-      // For demo purposes, we'll re-scan. In production, you might want to cache results
-      // or implement a different refresh strategy
-      const data = await apiClient.startScan(selectedInterface, DEFAULT_SCAN_DURATION);
+      // Poll for results of the current scan using scan ID, do not start a new scan
+      const data = await apiClient.getScanResults(lastScanId);
       setScanResults(data);
-      setLastScanId(data.scan_id);
+      // Optionally, if the scan is complete, you may want to stop auto-refresh here
+      // if (data.status === 'completed') setAutoRefresh(false);
     } catch (err) {
       console.warn('Auto-refresh failed:', err);
     }
-  }, [lastScanId, selectedInterface]);
+  }, [lastScanId]);
 
   const startScan = async () => {
     if (!selectedInterface) {

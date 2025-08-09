@@ -43,7 +43,8 @@ test.describe('WiFi Scanner Main Workflow', () => {
     await expect(interfaceSection).toBeVisible();
     
     // Wait for interfaces to load (they might be loading from API)
-    await page.waitForTimeout(2000);
+    // Wait for at least one interface row/item to appear (adjust selector as needed)
+    await page.waitForSelector('[data-testid="interface-row"], .interface-row, li, tr');
     
     // Take screenshot of interface selection
     await page.screenshot({ 

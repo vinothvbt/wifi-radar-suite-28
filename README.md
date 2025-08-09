@@ -163,6 +163,9 @@ The project uses Playwright for end-to-end testing of the complete user workflow
 
 **Running UI Tests**:
 ```bash
+# Validate E2E setup (recommended first run)
+./scripts/validate-e2e-setup.sh
+
 # Run all E2E tests (headless)
 npm run test:ui
 

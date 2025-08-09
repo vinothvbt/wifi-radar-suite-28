@@ -1,129 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import { WiFiAccessPoint, VisualizationMode } from '@/types/wifi';
-import { generateMockWiFiData } from '@/utils/mockData';
-import { PolarRadar } from '@/components/radar/PolarRadar';
-import { ThreatPanelTabs } from '@/components/radar/ThreatPanelTabs';
-import { TopNavBar } from '@/components/radar/TopNavBar';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import radarBackground from '@/assets/radar-background.jpg';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Wifi, Shield, Radar, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
-  const [accessPoints, setAccessPoints] = useState<WiFiAccessPoint[]>([]);
-  const [selectedAP, setSelectedAP] = useState<WiFiAccessPoint | null>(null);
-  const [mode, setMode] = useState<VisualizationMode>('POLAR');
-  const [isScanning, setIsScanning] = useState(false);
-  const [radarSettings, setRadarSettings] = useState({
-    zoom: 1,
-    centerX: 0,
-    centerY: 0,
-    showGrid: true,
-    showLabels: true,
-    sweepSpeed: 1
-  });
-
-  // Initialize with mock data
-  useEffect(() => {
-    setAccessPoints(generateMockWiFiData(20));
-  }, []);
-
-  // Simulate scanning
-  useEffect(() => {
-    if (!isScanning) return;
-
-    const interval = setInterval(() => {
-      setAccessPoints(prev => {
-        // Randomly update some APs or add new ones
-        if (Math.random() > 0.7) {
-          return generateMockWiFiData(Math.floor(Math.random() * 5) + 15);
-        }
-        return prev;
-      });
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isScanning]);
-
-  const toggleScanning = () => {
-    setIsScanning(!isScanning);
-  };
-
-  const resetRadar = () => {
-    setAccessPoints(generateMockWiFiData(20));
-    setSelectedAP(null);
-    setRadarSettings(prev => ({ ...prev, zoom: 1, centerX: 0, centerY: 0 }));
-  };
-
-  const calculateThreatCounts = () => {
-    return accessPoints.reduce(
-      (counts, ap) => {
-        counts[ap.threatLevel.toLowerCase() as keyof typeof counts]++;
-        return counts;
-      },
-      { critical: 0, high: 0, medium: 0, low: 0, unknown: 0 }
-    );
-  };
-
   return (
-    <div 
-      className="min-h-screen bg-background relative"
-      style={{
-        backgroundImage: `url(${radarBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
-      }}
-    >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
-      
-      {/* Main content */}
-      <div className="relative z-10 h-screen flex flex-col overflow-hidden">
-        {/* Top Navigation Bar */}
-        <TopNavBar
-          mode={mode}
-          onModeChange={setMode}
-          isScanning={isScanning}
-          onToggleScanning={toggleScanning}
-          onReset={resetRadar}
-          threatCounts={calculateThreatCounts()}
-          totalAPs={accessPoints.length}
-        />
-
-        {/* Main radar interface with resizable panels */}
-        <div className="flex-1 min-h-0">
-          <ResizablePanelGroup direction="horizontal" className="h-full">
-            {/* Radar display - Main area */}
-            <ResizablePanel defaultSize={75} minSize={50}>
-              <div className="h-full flex justify-center items-center p-4">
-                <div className="w-full h-full bg-card/50 backdrop-blur border border-border rounded-lg overflow-hidden">
-                  <PolarRadar
-                    accessPoints={accessPoints}
-                    selectedAP={selectedAP}
-                    onSelectAP={setSelectedAP}
-                    settings={radarSettings}
-                  />
-                </div>
-              </div>
-            </ResizablePanel>
-
-            {/* Resizable handle */}
-            <ResizableHandle withHandle />
-
-            {/* Threat analysis panel - Resizable */}
-            <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-              <div className="h-full p-4">
-                <ThreatPanelTabs
-                  selectedAP={selectedAP}
-                  onClose={() => setSelectedAP(null)}
-                />
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/50">
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center mb-6">
+            <Radar className="w-16 h-16 text-primary mr-4" />
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+              WiFi Radar Suite
+            </h1>
+          </div>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Professional WiFi security analysis and penetration testing toolkit with modern web interface
+          </p>
         </div>
 
-        {/* Compact Footer */}
-        <div className="flex-shrink-0 px-4 py-1 border-t border-border/30 text-center text-xs text-muted-foreground font-mono">
-          Air Radar v1.0 | For authorized penetration testing only
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Wifi className="w-6 h-6 mr-2 text-primary" />
+                Network Discovery
+              </CardTitle>
+              <CardDescription>
+                Discover and analyze nearby wireless networks with advanced scanning capabilities
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Interface detection and management</li>
+                <li>• Real-time WiFi network scanning</li>
+                <li>• Signal strength analysis</li>
+                <li>• Channel and frequency mapping</li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Shield className="w-6 h-6 mr-2 text-primary" />
+                Security Analysis
+              </CardTitle>
+              <CardDescription>
+                Comprehensive security assessment and vulnerability detection
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Security protocol identification</li>
+                <li>• Threat level assessment</li>
+                <li>• Vulnerability scoring</li>
+                <li>• Attack vector analysis</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="text-center space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/scan">
+              <Button size="lg" className="text-lg px-8 py-3">
+                Launch Scanner
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Link to="/wifi-radar">
+              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                Legacy Dashboard
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Requires FastAPI backend running on port 8000
+          </p>
+        </div>
+
+        <div className="mt-16 text-center">
+          <h2 className="text-2xl font-semibold mb-6">Features</h2>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Wifi className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-medium mb-2">Modern Web UI</h3>
+              <p className="text-sm text-muted-foreground">
+                Clean, responsive interface built with React and Tailwind CSS
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Radar className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-medium mb-2">FastAPI Backend</h3>
+              <p className="text-sm text-muted-foreground">
+                High-performance Python backend with async WiFi scanning
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Shield className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-medium mb-2">Kali Linux Ready</h3>
+              <p className="text-sm text-muted-foreground">
+                Optimized for Kali Linux with monitor mode support
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

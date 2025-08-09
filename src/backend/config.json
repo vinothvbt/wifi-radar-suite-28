@@ -1,0 +1,236 @@
+{
+  "wifi_scanner": {
+    "interface_detection": {
+      "commands": {
+        "list_interfaces": ["iw", "dev"],
+        "interface_info": ["iwconfig"],
+        "scan_command": ["iw", "dev", "{interface}", "scan"]
+      },
+      "timeouts": {
+        "scan_timeout": 15,
+        "interface_check_timeout": 5
+      }
+    },
+    "parsing": {
+      "patterns": {
+        "mac_address": "([0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2})",
+        "signal_strength": "signal:\\s*(-\\d+\\.\\d+)\\s*dBm",
+        "frequency": "freq:\\s*(\\d+)",
+        "ssid": "SSID:\\s*(.+)"
+      },
+      "security_keywords": {
+        "WPA3": ["WPA3", "SAE"],
+        "WPA2": ["WPA2", "RSN"],
+        "WPA": ["WPA"],
+        "WEP": ["WEP", "Privacy"],
+        "Open": []
+      }
+    }
+  },
+  "distance_calculation": {
+    "formulas": {
+      "free_space_path_loss": {
+        "enabled": true,
+        "base_formula": "20 * log10(distance) + 20 * log10(frequency) + 20 * log10(4 * pi / c)"
+      },
+      "environmental_factors": {
+        "indoor": {
+          "path_loss_exponent": 2.5,
+          "reference_distance": 1.0,
+          "reference_loss": 40.0
+        },
+        "outdoor": {
+          "path_loss_exponent": 2.0,
+          "reference_distance": 1.0,
+          "reference_loss": 32.0
+        }
+      },
+      "signal_ranges": {
+        "excellent": {"min": -30, "multiplier": 1.0},
+        "good": {"min": -50, "multiplier": 1.2},
+        "fair": {"min": -70, "multiplier": 1.5},
+        "poor": {"min": -80, "multiplier": 2.0},
+        "very_poor": {"min": -100, "multiplier": 3.0}
+      },
+      "frequency_corrections": {
+        "2.4GHz": {"min": 2400, "max": 2500, "multiplier": 1.0},
+        "5GHz": {"min": 5000, "max": 6000, "multiplier": 0.6}
+      }
+    }
+  },
+  "security_analysis": {
+    "vulnerability_scoring": {
+      "security_types": {
+        "Open": {
+          "base_score": 90,
+          "risk_level": "CRITICAL",
+          "attack_vectors": [
+            "Direct Access",
+            "Traffic Interception", 
+            "Man-in-the-Middle",
+            "Packet Injection",
+            "DNS Spoofing",
+            "Evil Twin Attack"
+          ]
+        },
+        "WEP": {
+          "base_score": 85,
+          "risk_level": "CRITICAL",
+          "attack_vectors": [
+            "WEP Key Cracking",
+            "IV Collection Attack",
+            "Chopchop Attack", 
+            "Fragmentation Attack",
+            "Fake Authentication",
+            "ARP Replay Attack"
+          ]
+        },
+        "WPA": {
+          "base_score": 40,
+          "risk_level": "HIGH",
+          "attack_vectors": [
+            "Handshake Capture",
+            "Dictionary Attack",
+            "Brute Force Attack",
+            "PMKID Attack",
+            "Evil Twin Attack"
+          ]
+        },
+        "WPA2": {
+          "base_score": 30,
+          "risk_level": "MEDIUM", 
+          "attack_vectors": [
+            "Handshake Capture",
+            "Dictionary Attack",
+            "PMKID Attack",
+            "WPS PIN Attack",
+            "KRACK Attack",
+            "Evil Twin Attack"
+          ]
+        },
+        "WPA3": {
+          "base_score": 10,
+          "risk_level": "LOW",
+          "attack_vectors": [
+            "SAE Downgrade",
+            "Dictionary Attack (SAE)",
+            "Timing Attack",
+            "Dragonblood Attack"
+          ]
+        }
+      },
+      "signal_strength_modifiers": {
+        "excellent": {"min": -30, "bonus": 20},
+        "good": {"min": -50, "bonus": 15},
+        "fair": {"min": -70, "bonus": 10},
+        "poor": {"min": -80, "bonus": 5},
+        "very_poor": {"min": -100, "bonus": 0}
+      },
+      "ssid_patterns": {
+        "default_router_names": {
+          "patterns": ["^(default|admin|router|linksys|netgear|dlink)$"],
+          "bonus": 15,
+          "reason": "Default/weak SSID naming"
+        },
+        "personal_info": {
+          "patterns": ["name", "address", "phone"],
+          "bonus": 10,
+          "reason": "Personal information in SSID"
+        }
+      },
+      "threat_levels": {
+        "CRITICAL": {"min": 80, "color": "#ff4444"},
+        "HIGH": {"min": 60, "color": "#ff8800"}, 
+        "MEDIUM": {"min": 40, "color": "#ffaa00"},
+        "LOW": {"min": 0, "color": "#88ff88"}
+      }
+    }
+  },
+  "vendor_detection": {
+    "oui_database_source": "https://standards-oui.ieee.org/oui/oui.txt",
+    "local_database": "oui_database.json",
+    "update_interval_days": 30,
+    "fallback_vendors": {
+      "common_ouis": {
+        "00:1B:63": "Apple Inc.",
+        "00:25:00": "Apple Inc.",
+        "00:26:08": "Apple Inc.",
+        "00:50:56": "VMware Inc.", 
+        "00:0C:29": "VMware Inc.",
+        "08:00:27": "Oracle VirtualBox",
+        "00:15:5D": "Microsoft Corporation",
+        "00:1C:42": "Parallels Inc.",
+        "00:14:6C": "NETGEAR",
+        "00:18:39": "Cisco Systems",
+        "00:0F:66": "Linksys",
+        "00:0B:86": "ARRIS Group"
+      }
+    }
+  },
+  "visualization": {
+    "radar_modes": {
+      "POLAR": {
+        "name": "Polar Radar",
+        "description": "Traditional radar with sweep animation",
+        "settings": {
+          "max_range": 200,
+          "range_rings": [50, 100, 150, 200],
+          "sweep_speed": 2000,
+          "fade_trails": true
+        }
+      },
+      "GRID": {
+        "name": "Grid Layout", 
+        "description": "Organized grid preventing overlaps",
+        "settings": {
+          "grid_size": 20,
+          "intelligent_positioning": true,
+          "collision_detection": true
+        }
+      },
+      "HEATMAP": {
+        "name": "Signal Heatmap",
+        "description": "Signal strength visualization", 
+        "settings": {
+          "gradient_colors": ["#0000ff", "#00ff00", "#ffff00", "#ff0000"],
+          "blur_radius": 20,
+          "transparency": 0.7
+        }
+      }
+    },
+    "colors": {
+      "theme": "dark",
+      "background": "#2b2b2b",
+      "primary": "#00cccc",
+      "secondary": "#404040",
+      "accent": "#00ff00",
+      "threat_levels": {
+        "CRITICAL": "#ff4444",
+        "HIGH": "#ff8800", 
+        "MEDIUM": "#ffaa00",
+        "LOW": "#88ff88"
+      }
+    }
+  },
+  "ui_layout": {
+    "panels": {
+      "left_sidebar": {
+        "width": 150,
+        "sections": ["threat_indicators", "scan_status", "statistics"]
+      },
+      "center_radar": {
+        "min_width": 600,
+        "min_height": 400
+      },
+      "right_panels": {
+        "width": 250,
+        "sections": ["target_details", "attack_vectors", "recommendations"]
+      }
+    },
+    "responsive": {
+      "compact_mode": {"width": 800, "height": 500},
+      "normal_mode": {"width": 1400, "height": 800},
+      "fullscreen_mode": {"maximized": true}
+    }
+  }
+}

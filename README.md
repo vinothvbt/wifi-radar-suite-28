@@ -1,278 +1,73 @@
-# WiFi Radar Suite - Web Edition
+# Welcome to your Lovable project
 
-A modern web-based WiFi security analysis application with React frontend and FastAPI backend, designed for professional security assessments on Kali Linux.
+## Project info
 
-## Features
+**URL**: https://lovable.dev/projects/134db823-f65f-4117-84d8-1b0e92a1cd33
 
-- **Modern Web Interface**: Clean, responsive React SPA with TypeScript and shadcn/ui components
-- **FastAPI Backend**: High-performance Python backend with async WiFi scanning capabilities
-- **Real-time Scanning**: Auto-refreshing WiFi network discovery and analysis
-- **Security Assessment**: Comprehensive threat level analysis and vulnerability scoring
-- **Kali Linux Optimized**: Designed for Kali Linux with monitor mode support
-- **Development Workflow**: Concurrent frontend/backend development setup
+## How can I edit this code?
 
-## Quick Start
+There are several ways of editing your application.
 
-### System Requirements
+**Use Lovable**
 
-- **Kali Linux** (recommended) or Ubuntu/Debian
-- **Python 3.8+** with pip
-- **Node.js 18+** with npm
-- **Root privileges** or capabilities for WiFi scanning
+Simply visit the [Lovable Project](https://lovable.dev/projects/134db823-f65f-4117-84d8-1b0e92a1cd33) and start prompting.
 
-### Installation
+Changes made via Lovable will be committed automatically to this repo.
 
-```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd wifi-radar-suite-28
+**Use your preferred IDE**
 
-# 2. Install system dependencies (Kali Linux)
-sudo apt update
-sudo apt install wireless-tools iw python3-pip python3-venv nodejs npm
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-# 3. Install Python backend dependencies
-cd src/backend
-pip install -r requirements.txt
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-# 4. Install frontend dependencies
-cd ../..
-npm install
+Follow these steps:
 
-# 5. Start development servers
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-### Usage
+**Edit a file directly in GitHub**
 
-The `npm run dev` command starts both the frontend and backend servers concurrently:
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-- **Frontend**: http://localhost:8080 (React + Vite)
-- **Backend**: http://127.0.0.1:8000 (FastAPI)
+**Use GitHub Codespaces**
 
-You can also start them individually:
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-```bash
-# Frontend only
-npm run frontend
+## What technologies are used for this project?
 
-# Backend only  
-npm run backend
-```
+This project is built with:
 
-### Environment Configuration
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-Copy `.env.example` to `.env` and adjust settings as needed:
+## How can I deploy this project?
 
-```bash
-cp .env.example .env
-```
+Simply open [Lovable](https://lovable.dev/projects/134db823-f65f-4117-84d8-1b0e92a1cd33) and click on Share -> Publish.
 
-## WiFi Scanning Capabilities
+## Can I connect a custom domain to my Lovable project?
 
-### Interface Detection
-- Automatic wireless interface discovery
-- Support for multiple wireless adapters
-- Monitor mode capability detection
-- Interface status monitoring
+Yes, you can!
 
-### Network Analysis
-- Real-time WiFi network scanning
-- Signal strength measurement
-- Security protocol identification (Open/WEP/WPA/WPA2/WPA3)
-- Channel and frequency analysis
-- Vendor identification via MAC OUI lookup
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-### Security Assessment
-- Automated threat level classification
-- Vulnerability scoring
-- Attack vector identification
-- Distance estimation
-- Confidence rating
-
-## API Endpoints
-
-### Interface Management
-- `GET /api/v1/interfaces` - List all network interfaces
-- `GET /api/v1/interfaces/wireless` - List wireless interfaces only
-
-### WiFi Scanning
-- `POST /api/v1/scan/start` - Start WiFi scan on specified interface
-- `GET /api/v1/scan/{scan_id}/status` - Get scan status
-- `DELETE /api/v1/scan/{scan_id}` - Cancel active scan
-- `GET /api/v1/scan/active` - List active scans
-
-### Health Check
-- `GET /health` - Backend health status
-- `GET /api/docs` - Interactive API documentation
-
-## Development
-
-### Project Structure
-
-```
-wifi-radar-suite-28/
-├── src/
-│   ├── backend/
-│   │   ├── api/
-│   │   │   ├── main.py          # FastAPI application
-│   │   │   ├── models.py        # Pydantic data models
-│   │   │   ├── routers/         # API route handlers
-│   │   │   └── services/        # Business logic
-│   │   ├── run.py               # Backend entry point
-│   │   ├── requirements.txt     # Python dependencies
-│   │   └── legacy-desktop/      # Previous PyQt desktop version
-│   ├── features/
-│   │   └── scan/
-│   │       └── ScanPage.tsx     # Main scanning interface
-│   ├── lib/
-│   │   └── api.ts               # Frontend API client
-│   ├── pages/                   # React pages/routes
-│   └── components/              # UI components
-├── e2e/                         # End-to-end tests
-│   ├── screenshots/             # Test screenshots
-│   └── scan.spec.ts            # Main workflow tests
-├── package.json                 # Node.js dependencies and scripts
-├── playwright.config.ts         # Playwright test configuration
-├── .env.example                 # Environment configuration template
-└── README.md                    # This file
-```
-
-### Technologies Used
-
-**Frontend**:
-- React 18 with TypeScript
-- Vite for development and building
-- shadcn/ui component library
-- Tailwind CSS for styling
-- React Router for navigation
-
-**Backend**:
-- FastAPI for REST API
-- Pydantic for data validation
-- Uvicorn ASGI server
-- Async Python for performance
-
-### Testing
-
-#### Unit Testing
-Currently, no unit tests are implemented. The project focuses on end-to-end testing for comprehensive workflow validation.
-
-#### End-to-End (E2E) Testing
-The project uses Playwright for end-to-end testing of the complete user workflow:
-
-**Running UI Tests**:
-```bash
-# Validate E2E setup (recommended first run)
-./scripts/validate-e2e-setup.sh
-
-# Run all E2E tests (headless)
-npm run test:ui
-
-# Run tests with browser visible (headed mode)
-npm run test:ui:headed
-
-# Debug tests with step-by-step interaction
-npm run test:ui:debug
-```
-
-**Test Coverage**:
-- Interface detection and selection
-- WiFi scan start/stop functionality
-- Network results display and interaction
-- Auto-refresh controls
-- Error handling (API disconnection)
-- Responsive design verification
-
-**Screenshots**:
-Tests automatically capture screenshots at key workflow steps:
-- `e2e/screenshots/01-initial-page-load.png` - Application startup
-- `e2e/screenshots/02-api-connection-status.png` - Backend connectivity
-- `e2e/screenshots/03-interface-selection.png` - Network interface selection
-- `e2e/screenshots/04-before-scan-start.png` - Pre-scan state
-- `e2e/screenshots/05-scan-running.png` - Active scanning state
-- `e2e/screenshots/06-scan-results-loaded.png` - Results display
-- `e2e/screenshots/07-auto-refresh-controls.png` - Auto-refresh UI
-- `e2e/screenshots/08-scan-stopped.png` - Scan completion
-- `e2e/screenshots/09-final-state.png` - Final application state
-
-Additional screenshots for error states and responsive design testing are also captured.
-
-**Test Configuration**:
-- Playwright configuration: `playwright.config.ts`
-- Main test suite: `e2e/scan.spec.ts`
-- Automatic frontend server startup for testing
-- Cross-browser testing support (currently Chrome/Chromium)
-
-**Viewing Test Results**:
-```bash
-# View HTML test report (after running tests)
-npx playwright show-report
-
-# View screenshots in e2e/screenshots/ directory
-ls -la e2e/screenshots/
-```
-
-## Kali Linux Setup
-
-### Required Packages
-
-```bash
-# System packages
-sudo apt install wireless-tools iw python3-pip python3-venv nodejs npm
-
-# Optional: Enable capabilities instead of running as root
-sudo setcap cap_net_raw,cap_net_admin+eip /usr/bin/python3
-```
-
-### WiFi Interface Management
-
-```bash
-# Check available interfaces
-iwconfig
-iw dev
-
-# Bring interface up
-sudo ip link set wlan0 up
-
-# Stop NetworkManager if scanning conflicts occur
-sudo systemctl stop NetworkManager
-sudo systemctl stop wpa_supplicant
-```
-
-## Troubleshooting
-
-### Common Issues
-
-**"No wireless interfaces detected"**
-- Verify wireless hardware is present
-- Check interface status with `iwconfig`
-- Ensure proper drivers are installed
-
-**"Backend API not available"**
-- Verify backend server is running on port 8000
-- Check firewall settings
-- Ensure Python dependencies are installed
-
-**"Permission denied" during scanning**
-- Run backend with root privileges: `sudo npm run backend`
-- Or configure capabilities: `sudo setcap cap_net_raw,cap_net_admin+eip /usr/bin/python3`
-
-**Port conflicts**
-- Frontend default: 8080 (Vite auto-increments if busy)
-- Backend default: 8000
-- Adjust ports in `.env` if needed
-
-## Legal Notice
-
-This tool is designed for **educational purposes** and **authorized security testing** only. Users are responsible for ensuring compliance with applicable laws and regulations. Unauthorized access to WiFi networks is illegal in most jurisdictions.
-
-**Use responsibly and ethically.**
-
-## Contributing
-
-Contributions are welcome! Please ensure any modifications maintain the professional security focus and modern architecture of the project.
-
-## License
-
-See LICENSE file for details.
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)

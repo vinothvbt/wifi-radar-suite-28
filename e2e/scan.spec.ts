@@ -82,8 +82,11 @@ test.describe('WiFi Scanner Main Workflow', () => {
         fullPage: true 
       });
       
-      // Wait for scan to complete or timeout
-      await page.waitForTimeout(3000);
+      // Wait for scan results or error message to appear
+      await Promise.race([
+        page.waitForSelector('text=Scan Results', { timeout: 10000 }),
+        page.waitForSelector('[role="alert"], .text-red-500', { timeout: 10000 }),
+      ]);
       
       // Step 6: Check for scan results or error handling
       const hasResults = await page.locator('text=Scan Results').isVisible();

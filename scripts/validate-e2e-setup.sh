@@ -21,7 +21,7 @@ fi
 
 # Check if browsers are installed
 echo "🌐 Checking browser installation..."
-if npx playwright install --dry-run chromium 2>/dev/null; then
+if npx playwright install --list | grep -q 'chromium'; then
     echo "✅ Chromium browser is available"
 else
     echo "⚠️  Installing Chromium browser..."

@@ -29,7 +29,7 @@ test.describe('WiFi Scanner Main Workflow', () => {
     });
 
     // Step 2: Check API connection status
-    const apiStatus = page.locator('[data-testid="api-status"], .text-green-600, .text-red-600').first();
+    const apiStatus = page.locator('[data-testid="api-status"]').first();
     await expect(apiStatus).toBeVisible();
     
     // Take screenshot of API status

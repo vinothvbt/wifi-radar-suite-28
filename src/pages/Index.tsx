@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WiFiAccessPoint, VisualizationMode } from '@/types/wifi';
 import { generateMockWiFiData } from '@/utils/mockData';
 import { PolarRadar } from '@/components/radar/PolarRadar';
-import { ThreatPanel } from '@/components/radar/ThreatPanel';
+import { ThreatPanelTabs } from '@/components/radar/ThreatPanelTabs';
 import { RadarControls } from '@/components/radar/RadarControls';
 import radarBackground from '@/assets/radar-background.jpg';
 
@@ -98,9 +98,9 @@ const Index = () => {
         </div>
 
         {/* Main radar interface - Single row layout */}
-        <div className="flex-1 flex gap-3 px-4 py-2 min-h-0 overflow-hidden">
+        <div className="flex-1 flex gap-4 px-4 py-2 min-h-0 overflow-hidden">
           {/* Controls sidebar - Compact */}
-          <div className="w-72 flex-shrink-0">
+          <div className="w-64 flex-shrink-0">
             <RadarControls
               mode={mode}
               onModeChange={setMode}
@@ -111,39 +111,21 @@ const Index = () => {
             />
           </div>
 
-          {/* Radar display - Takes remaining space */}
-          <div className="flex-1 min-w-0">
-            <div className="w-full h-full bg-card/50 backdrop-blur border border-border rounded-lg overflow-hidden">
-              {mode === 'POLAR' && (
-                <PolarRadar
-                  accessPoints={accessPoints}
-                  selectedAP={selectedAP}
-                  onSelectAP={setSelectedAP}
-                  settings={radarSettings}
-                />
-              )}
-              {mode === 'GRID' && (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">🚧</div>
-                    <div>Grid Mode Coming Soon</div>
-                  </div>
-                </div>
-              )}
-              {mode === 'HEATMAP' && (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">🚧</div>
-                    <div>Heatmap Mode Coming Soon</div>
-                  </div>
-                </div>
-              )}
+          {/* Radar display - Takes remaining space with proper aspect ratio */}
+          <div className="flex-1 min-w-0 flex justify-center items-center">
+            <div className="w-full h-full max-w-4xl bg-card/50 backdrop-blur border border-border rounded-lg overflow-hidden">
+              <PolarRadar
+                accessPoints={accessPoints}
+                selectedAP={selectedAP}
+                onSelectAP={setSelectedAP}
+                settings={radarSettings}
+              />
             </div>
           </div>
 
           {/* Threat analysis panel - Fixed width, shows inline with radar */}
-          <div className="w-80 flex-shrink-0">
-            <ThreatPanel
+          <div className="w-96 flex-shrink-0">
+            <ThreatPanelTabs
               selectedAP={selectedAP}
               onClose={() => setSelectedAP(null)}
             />

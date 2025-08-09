@@ -82,17 +82,8 @@ export const RadarControls: React.FC<RadarControlsProps> = ({
 
         {/* Visualization Mode */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-xs font-mono">VISUALIZATION</h3>{/* Smaller heading */}
-          <div className="grid grid-cols-3 gap-1">
-            <Button
-              onClick={() => onModeChange('GRID')}
-              variant={mode === 'GRID' ? "default" : "outline"}
-              size="sm"
-              className="flex flex-col gap-1 h-auto py-2"
-            >
-              <Grid3X3 className="h-4 w-4" />
-              <span className="text-xs">GRID</span>
-            </Button>
+          <h3 className="font-semibold text-xs font-mono">VISUALIZATION</h3>
+          <div className="grid grid-cols-2 gap-1">
             <Button
               onClick={() => onModeChange('POLAR')}
               variant={mode === 'POLAR' ? "default" : "outline"}

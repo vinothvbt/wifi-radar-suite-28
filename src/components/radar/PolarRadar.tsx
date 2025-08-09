@@ -169,11 +169,14 @@ export const PolarRadar: React.FC<PolarRadarProps> = ({
         ctx.stroke();
       }
 
-      // Draw labels if enabled
-      if (settings.showLabels && (isSelected || isHovered)) {
-        ctx.fillStyle = 'hsl(160, 84%, 78%)';
-        ctx.font = '10px monospace';
+      // Draw labels if enabled - show for all visible APs, not just hovered
+      if (settings.showLabels && distance < maxRadius * 0.8) {
+        ctx.fillStyle = isSelected ? 'hsl(160, 84%, 90%)' : isHovered ? 'hsl(160, 84%, 78%)' : 'hsl(160, 50%, 60%)';
+        ctx.font = isSelected ? '12px monospace' : '10px monospace';
         ctx.textAlign = 'center';
+        ctx.strokeStyle = 'hsl(220, 27%, 6%)';
+        ctx.lineWidth = 2;
+        ctx.strokeText(ap.ssid, x, y - size - 8);
         ctx.fillText(ap.ssid, x, y - size - 8);
       }
     });
@@ -260,33 +263,58 @@ export const PolarRadar: React.FC<PolarRadarProps> = ({
     setHoveredAP(hoveredAP);
   };
 
+  // Handle resize to maintain aspect ratio
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const updateCanvasSize = () => {
+      const container = canvas.parentElement;
+      if (!container) return;
+      
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+      const size = Math.min(containerWidth, containerHeight) * 0.95;
+      
+      canvas.width = size;
+      canvas.height = size;
+    };
+    
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, []);
+
   return (
-    <div className="relative w-full h-full bg-radar-background rounded-lg overflow-hidden">
+    <div className="relative w-full h-full bg-radar-background rounded-lg overflow-hidden flex items-center justify-center">
       <canvas
         ref={canvasRef}
-        width={800}
-        height={600}
-        className="w-full h-full cursor-crosshair"
+        className="cursor-crosshair"
         onClick={handleCanvasClick}
         onMouseMove={handleCanvasMouseMove}
         onMouseLeave={() => setHoveredAP(null)}
       />
       
       {/* Radar overlay UI */}
-      <div className="absolute top-2 left-2 text-primary font-mono text-xs">{/* Smaller overlay text */}
+      <div className="absolute top-4 left-4 text-primary font-mono text-xs bg-card/80 backdrop-blur rounded p-2">
         <div>RADAR: POLAR</div>
         <div>TARGETS: {accessPoints.length}</div>
+        <div>SELECTED: {selectedAP ? selectedAP.ssid : 'NONE'}</div>
       </div>
       
       {/* Quick hover tooltip */}
       {hoveredAP && (
-        <div className="absolute bottom-2 left-2 bg-card/90 backdrop-blur border border-border rounded p-2 text-xs font-mono">
-          <div className="text-foreground font-bold">{hoveredAP.ssid}</div>
-          <div className="text-muted-foreground">
-            {hoveredAP.signalStrength}dBm | 
-            <span className={`${getThreatColor(hoveredAP.threatLevel)} font-bold ml-1`}>
-              {hoveredAP.threatLevel}
-            </span>
+        <div className="absolute bottom-4 left-4 bg-card/90 backdrop-blur border border-border rounded p-3 text-xs font-mono min-w-48">
+          <div className="text-foreground font-bold text-sm mb-1">{hoveredAP.ssid}</div>
+          <div className="text-muted-foreground space-y-1">
+            <div>Signal: {hoveredAP.signalStrength}dBm</div>
+            <div>Channel: {hoveredAP.channel}</div>
+            <div className="flex items-center gap-2">
+              Threat: 
+              <span className={`${getThreatColor(hoveredAP.threatLevel)} font-bold`}>
+                {hoveredAP.threatLevel}
+              </span>
+            </div>
           </div>
         </div>
       )}

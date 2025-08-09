@@ -329,7 +329,9 @@ class WiFiService:
             
             # SSID
             elif line.startswith('SSID: '):
-                current_ap['ssid'] = line[6:] or f"Hidden_{current_ap.get('bssid', 'Unknown')}"
+                # Defensive: ensure 'bssid' is present, otherwise use a clear fallback
+                bssid = current_ap.get('bssid', 'MissingBSSID')
+                current_ap['ssid'] = line[6:] or f"Hidden_{bssid}"
             
             # Signal strength
             elif 'signal:' in line:

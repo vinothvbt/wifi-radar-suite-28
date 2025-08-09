@@ -214,11 +214,11 @@ class WiFiService:
     async def _check_monitor_capability(self, interface: str) -> bool:
         """Check if interface supports monitor mode"""
         try:
-            result = subprocess.run(['iw', interface, 'info'], capture_output=True, text=True, timeout=5)
-            if result.returncode == 0:
-                # Check supported interface modes
-                result = subprocess.run(['iw', 'phy', f'phy{interface[-1] if interface[-1].isdigit() else "0"}', 'info'], 
-                                      capture_output=True, text=True, timeout=5)
+            # Get the phy index for the interface
+            phy_index = await self._get_phy_index(interface)
+            if phy_index is not None:
+                result = subprocess.run(['iw', 'phy', f'phy{phy_index}', 'info'],
+                                       capture_output=True, text=True, timeout=5)
                 if result.returncode == 0 and 'monitor' in result.stdout:
                     return True
         except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):

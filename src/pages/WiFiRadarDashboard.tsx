@@ -91,7 +91,7 @@ export default function WiFiRadarDashboard() {
     setError('');
 
     try {
-      const response = await fetch(`${API_BASE}/scan/start?interface=${selectedInterface}&duration=10`, {
+      const response = await fetch(`${API_BASE}/scan/start?interface=${selectedInterface}&duration=${DEFAULT_SCAN_DURATION}`, {
         method: 'POST'
       });
       

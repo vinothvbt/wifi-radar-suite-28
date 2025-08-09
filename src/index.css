@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Air Radar - Cybersecurity Theme Design System
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Dark cybersecurity theme */
+    --background: 220 27% 8%;
+    --foreground: 160 84% 78%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 160 84% 78%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 160 84% 78%;
+
+    /* Radar green primary */
+    --primary: 160 84% 39%;
+    --primary-foreground: 220 27% 8%;
+
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 160 60% 70%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 160 20% 50%;
+
+    --accent: 160 84% 39%;
+    --accent-foreground: 220 27% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 27% 8%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 160 84% 39%;
+
+    /* Threat level colors */
+    --threat-critical: 0 84% 60%;
+    --threat-high: 25 95% 53%;
+    --threat-medium: 48 96% 53%;
+    --threat-low: 160 84% 39%;
+    --threat-unknown: 220 15% 40%;
+
+    /* Radar specific colors */
+    --radar-sweep: 160 84% 39%;
+    --radar-grid: 160 30% 25%;
+    --radar-background: 220 27% 6%;
+
+    /* Glows and effects */
+    --glow-green: 160 84% 39%;
+    --glow-amber: 48 96% 53%;
+    --glow-red: 0 84% 60%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Keep same values - we're using dark theme by default */
+    --background: 220 27% 8%;
+    --foreground: 160 84% 78%;
+    --card: 220 25% 12%;
+    --card-foreground: 160 84% 78%;
+    --popover: 220 25% 12%;
+    --popover-foreground: 160 84% 78%;
+    --primary: 160 84% 39%;
+    --primary-foreground: 220 27% 8%;
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 160 60% 70%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 160 20% 50%;
+    --accent: 160 84% 39%;
+    --accent-foreground: 220 27% 8%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 27% 8%;
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 160 84% 39%;
+    --sidebar-background: 220 25% 12%;
+    --sidebar-foreground: 160 84% 78%;
+    --sidebar-primary: 160 84% 39%;
+    --sidebar-primary-foreground: 220 27% 8%;
+    --sidebar-accent: 220 20% 18%;
+    --sidebar-accent-foreground: 160 60% 70%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 160 84% 39%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    background-attachment: fixed;
+  }
+
+  .radar-sweep {
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      hsla(var(--radar-sweep), 0.1) 45deg,
+      hsla(var(--radar-sweep), 0.3) 90deg,
+      transparent 135deg
+    );
+  }
+
+  .threat-critical {
+    @apply bg-red-500/20 border-red-500 text-red-400;
+    box-shadow: 0 0 20px hsla(var(--threat-critical), 0.3);
+  }
+
+  .threat-high {
+    @apply bg-orange-500/20 border-orange-500 text-orange-400;
+    box-shadow: 0 0 15px hsla(var(--threat-high), 0.3);
+  }
+
+  .threat-medium {
+    @apply bg-yellow-500/20 border-yellow-500 text-yellow-400;
+    box-shadow: 0 0 10px hsla(var(--threat-medium), 0.3);
+  }
+
+  .threat-low {
+    @apply bg-green-500/20 border-green-500 text-green-400;
+    box-shadow: 0 0 8px hsla(var(--threat-low), 0.3);
+  }
+
+  .threat-unknown {
+    @apply bg-gray-500/20 border-gray-500 text-gray-400;
+  }
+}

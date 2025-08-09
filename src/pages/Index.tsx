@@ -3,7 +3,8 @@ import { WiFiAccessPoint, VisualizationMode } from '@/types/wifi';
 import { generateMockWiFiData } from '@/utils/mockData';
 import { PolarRadar } from '@/components/radar/PolarRadar';
 import { ThreatPanelTabs } from '@/components/radar/ThreatPanelTabs';
-import { RadarControls } from '@/components/radar/RadarControls';
+import { TopNavBar } from '@/components/radar/TopNavBar';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import radarBackground from '@/assets/radar-background.jpg';
 
 const Index = () => {
@@ -76,60 +77,48 @@ const Index = () => {
       <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
       
       {/* Main content */}
-      <div className="relative z-10 h-screen flex flex-col overflow-hidden">{/* Prevent any scrolling */}
-        {/* Compact Header */}
-        <div className="flex-shrink-0 px-4 py-2 border-b border-border/30">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold font-mono text-primary">AIR RADAR</h1>
-              <div className="text-xs font-mono text-muted-foreground">
-                WiFi Security Reconnaissance Suite
+      <div className="relative z-10 h-screen flex flex-col overflow-hidden">
+        {/* Top Navigation Bar */}
+        <TopNavBar
+          mode={mode}
+          onModeChange={setMode}
+          isScanning={isScanning}
+          onToggleScanning={toggleScanning}
+          onReset={resetRadar}
+          threatCounts={calculateThreatCounts()}
+          totalAPs={accessPoints.length}
+        />
+
+        {/* Main radar interface with resizable panels */}
+        <div className="flex-1 min-h-0">
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            {/* Radar display - Main area */}
+            <ResizablePanel defaultSize={75} minSize={50}>
+              <div className="h-full flex justify-center items-center p-4">
+                <div className="w-full h-full bg-card/50 backdrop-blur border border-border rounded-lg overflow-hidden">
+                  <PolarRadar
+                    accessPoints={accessPoints}
+                    selectedAP={selectedAP}
+                    onSelectAP={setSelectedAP}
+                    settings={radarSettings}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-6 font-mono text-xs">
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${isScanning ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-                <span>{isScanning ? 'SCANNING' : 'STANDBY'}</span>
+            </ResizablePanel>
+
+            {/* Resizable handle */}
+            <ResizableHandle withHandle />
+
+            {/* Threat analysis panel - Resizable */}
+            <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+              <div className="h-full p-4">
+                <ThreatPanelTabs
+                  selectedAP={selectedAP}
+                  onClose={() => setSelectedAP(null)}
+                />
               </div>
-              <div>MODE: {mode}</div>
-              <div>TARGETS: {accessPoints.length}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main radar interface - Single row layout */}
-        <div className="flex-1 flex gap-4 px-4 py-2 min-h-0 overflow-hidden">
-          {/* Controls sidebar - Compact */}
-          <div className="w-64 flex-shrink-0">
-            <RadarControls
-              mode={mode}
-              onModeChange={setMode}
-              isScanning={isScanning}
-              onToggleScanning={toggleScanning}
-              onReset={resetRadar}
-              threatCounts={calculateThreatCounts()}
-            />
-          </div>
-
-          {/* Radar display - Takes remaining space with proper aspect ratio */}
-          <div className="flex-1 min-w-0 flex justify-center items-center">
-            <div className="w-full h-full max-w-4xl bg-card/50 backdrop-blur border border-border rounded-lg overflow-hidden">
-              <PolarRadar
-                accessPoints={accessPoints}
-                selectedAP={selectedAP}
-                onSelectAP={setSelectedAP}
-                settings={radarSettings}
-              />
-            </div>
-          </div>
-
-          {/* Threat analysis panel - Fixed width, shows inline with radar */}
-          <div className="w-96 flex-shrink-0">
-            <ThreatPanelTabs
-              selectedAP={selectedAP}
-              onClose={() => setSelectedAP(null)}
-            />
-          </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </div>
 
         {/* Compact Footer */}

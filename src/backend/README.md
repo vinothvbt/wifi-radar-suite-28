@@ -1,172 +1,101 @@
-# WiFi Security Radar Suite v5.0
+# WiFi Radar Suite - Web Edition
 
-## Professional WiFi Security Analysis Tools
+## Modern Web-Based WiFi Security Analysis Tool
 
-A comprehensive suite of WiFi security analysis tools featuring modern interfaces, comprehensive theming, and advanced penetration testing capabilities.
+A comprehensive web-based WiFi security analysis application with React frontend and FastAPI backend, designed for professional security assessments on Kali Linux.
 
 ### Quick Start
 
 ```bash
-# Install dependencies
+# Install system dependencies (Kali Linux)
 sudo apt update
-sudo apt install python3-pyqt5 python3-pyqt5-dev wireless-tools iw
+sudo apt install wireless-tools iw python3-pip python3-venv nodejs npm
 
-# Install Python dependencies
+# Install Python backend dependencies
+cd src/backend
 pip install -r requirements.txt
 
-# Launch the main suite (requires root for WiFi scanning)
-sudo python3 main_launcher.py
+# Install frontend dependencies (in project root)
+npm install
+
+# Start development servers
+npm run dev
 ```
 
-## Available Tools
+## Architecture
 
-### 1. Navigation Enhanced WiFi Radar (wifi_radar_nav_enhanced.py)
-- **Modern navigation bar interface** with professional menu system
-- **Multiple view modes**: Compact (800x500), Normal (1400x800), Fullscreen
-- **Comprehensive hacker-style theming** with Matrix green accents
-- **Scrollable analysis panels** with enhanced readability
-- **Professional status bar** with real-time information
-- **Zoom functionality** and keyboard shortcuts
+### Backend (FastAPI)
+- **FastAPI REST API** providing WiFi scanning and interface management
+- **WiFi Service** for headless WiFi scanning without GUI dependencies
+- **Interface Detection** with support for multiple wireless adapters
+- **Security Analysis** with threat assessment and vulnerability scoring
 
-**Features:**
-- Complete UI theming consistency
-- Dynamic view mode switching
-- Comprehensive keyboard shortcuts
-- Enhanced dialog systems
-- Professional status indicators
-
-### 2. Modern Penetration Testing Radar (wifi_pentest_radar_modern.py)
-- **Modern radar display v4.0** with advanced visualization modes
-- **Multiple visualization types**: Grid, Polar, and Heatmap modes
-- **Advanced vulnerability scoring** with comprehensive threat analysis
-- **Enhanced distance calculation** using sophisticated algorithms
-- **Professional modern UI** with Material Design elements
-- **Copy functionality** for analysis results and reports
-
-**Features:**
-- Industry-level vulnerability assessment
-- Real-time radar visualization with animations
-- Intelligent AP positioning to prevent overlapping
-- Advanced threat level classification
-- Modern professional interface design
-- Comprehensive analysis report generation
-
-## Project Structure
-
-```
-wifiMap/
-├── main_launcher.py              # Main application launcher
-├── wifi_radar_nav_enhanced.py    # Navigation enhanced interface
-├── wifi_pentest_radar_modern.py  # Modern penetration testing radar v4.0
-├── requirements.txt              # Python dependencies
-├── settings.json                 # Application settings
-├── README.md                     # This documentation
-├── THEMING_AND_VIEWS.md         # Theming and view modes guide
-├── modern_styles.qss            # Modern UI stylesheet
-├── old/                         # Previous versions and deprecated files
-├── backup/                      # Duplicate files from cleanup
-└── .venv/                       # Virtual environment (optional)
-```
+### Frontend (React + TypeScript)
+- **Modern React SPA** with TypeScript and Tailwind CSS
+- **Real-time Updates** with auto-refresh of scan results
+- **Responsive Design** optimized for various screen sizes
+- **Professional UI** with shadcn/ui components
 
 ## System Requirements
 
 ### Operating System
-- Linux (Ubuntu/Debian/Kali recommended)
-- Root privileges required for WiFi scanning
+- **Kali Linux** (primary target) or Ubuntu/Debian
+- **Root privileges** or appropriate capabilities for WiFi scanning
 
 ### Dependencies
-- Python 3.6+
-- PyQt5
-- Wireless tools (iw, iwlist)
+- **Python 3.8+** with FastAPI, uvicorn, pydantic
+- **Node.js 18+** with npm for frontend development
+- **Wireless tools** (iw, iwlist) for WiFi interface management
 
 ### Installation Commands
 
 ```bash
-# Ubuntu/Debian
-sudo apt install python3-pyqt5 python3-pyqt5-dev wireless-tools iw
+# Kali Linux system packages
+sudo apt install wireless-tools iw python3-pip python3-venv nodejs npm
 
-# Kali Linux
-sudo apt install python3-pyqt5 wireless-tools iw
+# Python backend dependencies
+cd src/backend
+pip install -r requirements.txt
 
-# Arch Linux
-sudo pacman -S python-pyqt5 wireless_tools iw
-
-# Python packages
-pip install PyQt5
+# Frontend dependencies
+npm install
 ```
 
 ## Usage
 
-### Method 1: Main Launcher (Recommended)
+### Development Mode
 ```bash
-sudo python3 main_launcher.py
-```
-- Choose between Navigation Enhanced or Modern Penetration Testing interface
-- Professional launcher with program selection
-
-### Method 2: Direct Launch
-```bash
-# Navigation Enhanced Interface
-sudo python3 wifi_radar_nav_enhanced.py
-
-# Modern Penetration Testing Radar
-sudo python3 wifi_pentest_radar_modern.py
+# Start both frontend and backend servers
+npm run dev
 ```
 
-## Keyboard Shortcuts
+### Manual Mode
+```bash
+# Start backend server (Terminal 1)
+cd src/backend
+python3 run.py
 
-### Navigation Enhanced Interface
-- `Ctrl+1`: Compact Mode (800x500)
-- `Ctrl+2`: Normal Mode (1400x800)  
-- `F11`: Fullscreen Mode
-- `F5`: Refresh Scan
-- `Ctrl+N`: New Scan
-- `Ctrl+S`: Save Results
-- `Ctrl++`: Zoom In
-- `Ctrl+-`: Zoom Out
-- `Ctrl+Q`: Exit
+# Start frontend dev server (Terminal 2) 
+npm run dev
+```
 
-### Modern Penetration Testing Radar
-- `Ctrl+1`: Compact Mode (800x500)
-- `Ctrl+2`: Normal Mode (1400x800)
-- `F11`: Fullscreen Mode
-- `Ctrl+N`: New Scan
-- `Ctrl+S`: Save Results
-- `F5`: Manual Scan
-- `Spacebar`: Start/Stop Scanning
-- `Mouse Click`: Select Access Point
-- `Scroll Wheel`: Adjust Range
-- `Ctrl+Q`: Exit
+Access the application at `http://localhost:5173`
 
-## Modern Radar Visualization Modes
+## API Endpoints
 
-### Grid Mode
-- **Organized grid layout** preventing AP overlaps
-- **Professional grid lines** with distance markers
-- **Intelligent positioning** based on signal strength and distance
+### Interface Management
+- `GET /api/v1/interfaces` - List all network interfaces
+- `GET /api/v1/interfaces/wireless` - List wireless interfaces only
 
-### Polar Mode
-- **Traditional radar sweep** with animated visualization
-- **Distance rings** with labeled ranges
-- **Angle-based positioning** with sweep animation
+### WiFi Scanning
+- `POST /api/v1/scan/start` - Start WiFi scan on specified interface
+- `GET /api/v1/scan/{scan_id}/status` - Get scan status
+- `DELETE /api/v1/scan/{scan_id}` - Cancel active scan
+- `GET /api/v1/scan/active` - List active scans
 
-### Heatmap Mode
-- **Signal strength visualization** with colored gradients
-- **Threat level indicators** with color coding
-- **Cluster analysis** based on signal patterns
-
-## Theming System
-
-Both interfaces feature comprehensive **professional hacker-style theming**:
-
-- **Matrix Green Color Scheme** (#00FF00) with dark backgrounds
-- **JetBrains Mono Typography** for authentic monospace appearance
-- **Consistent UI Elements** across all components
-- **Professional Hover Effects** and interactive feedback
-- **Custom Styled Components** (scrollbars, buttons, dialogs)
-- **Modern Material Design** elements in the radar interface
-
-See `THEMING_AND_VIEWS.md` for detailed theming documentation.
+### Health Check
+- `GET /health` - Backend health status
+- `GET /` - API information
 
 ## Security Features
 

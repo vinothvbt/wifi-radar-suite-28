@@ -61,14 +61,22 @@ const Index = () => {
           </Card>
         </div>
 
-        <div className="text-center">
-          <Link to="/wifi-radar">
-            <Button size="lg" className="text-lg px-8 py-3">
-              Launch WiFi Radar
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
-          <p className="text-sm text-muted-foreground mt-4">
+        <div className="text-center space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/scan">
+              <Button size="lg" className="text-lg px-8 py-3">
+                Launch Scanner
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Link to="/wifi-radar">
+              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                Legacy Dashboard
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
+          <p className="text-sm text-muted-foreground">
             Requires FastAPI backend running on port 8000
           </p>
         </div>

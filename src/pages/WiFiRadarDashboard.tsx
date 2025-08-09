@@ -4,37 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Wifi, WifiOff, Shield, AlertTriangle } from 'lucide-react';
+import {
+  apiClient,
+  NetworkInterface,
+  AccessPoint,
+  ScanResponse,
+  getSignalStrength,
+  getThreatColor,
+  formatTimestamp
+} from '@/lib/api';
 
-interface NetworkInterface {
-  name: string;
-  type: string;
-  status: string;
-  mac_address?: string;
-  is_monitor_capable: boolean;
-}
-
-interface AccessPoint {
-  bssid: string;
-  ssid: string;
-  signal_dbm: number;
-  frequency: number;
-  channel?: number;
-  security: string;
-  vendor?: string;
-  threat_level: string;
-  confidence: number;
-}
-
-interface ScanResponse {
-  scan_id: string;
-  interface: string;
-  access_points: AccessPoint[];
-  total_count: number;
-  scan_duration: number;
-  timestamp: string;
-}
-
-const API_BASE = 'http://127.0.0.1:8000/api/v1';
+const DEFAULT_SCAN_DURATION = 5;
 
 export default function WiFiRadarDashboard() {
   const [interfaces, setInterfaces] = useState<NetworkInterface[]>([]);
@@ -51,10 +31,9 @@ export default function WiFiRadarDashboard() {
 
   const checkApiHealth = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/health');
-      if (response.ok) {
-        setApiConnected(true);
-      }
+      await apiClient.checkHealth();
+      setApiConnected(true);
+      setError('');
     } catch (err) {
       setApiConnected(false);
       setError('Backend API not available. Please start the FastAPI server.');
@@ -63,20 +42,15 @@ export default function WiFiRadarDashboard() {
 
   const loadInterfaces = async () => {
     try {
-      const response = await fetch(`${API_BASE}/interfaces`);
-      const data = await response.json();
+      const data = await apiClient.getInterfaces();
+      setInterfaces(data.interfaces);
       
-      if (response.ok) {
-        setInterfaces(data.interfaces);
-        if (data.interfaces.length > 0) {
-          setSelectedInterface(data.interfaces[0].name);
-        }
-        setError('');
-      } else {
-        setError(data.detail || 'Failed to load interfaces');
+      if (data.interfaces.length > 0) {
+        setSelectedInterface(data.interfaces[0].name);
       }
+      setError('');
     } catch (err) {
-      setError('Failed to connect to backend API');
+      setError(`Failed to load interfaces: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 
@@ -91,39 +65,21 @@ export default function WiFiRadarDashboard() {
     setError('');
 
     try {
-      const response = await fetch(`${API_BASE}/scan/start?interface=${selectedInterface}&duration=${DEFAULT_SCAN_DURATION}`, {
-        method: 'POST'
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setScanResults(data);
-      } else {
-        setError(data.detail || 'Scan failed');
-      }
+      const data = await apiClient.startScan(selectedInterface, DEFAULT_SCAN_DURATION);
+      setScanResults(data);
     } catch (err) {
-      setError('Failed to start scan');
+      setError(`Scan failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setScanning(false);
     }
   };
 
   const getThreatColor = (level: string) => {
-    switch (level.toLowerCase()) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'outline';
-    }
+    return getThreatColor(level);
   };
 
   const getSignalStrength = (dbm: number) => {
-    if (dbm > -50) return 'Excellent';
-    if (dbm > -60) return 'Good';
-    if (dbm > -70) return 'Fair';
-    return 'Weak';
+    return getSignalStrength(dbm);
   };
 
   return (

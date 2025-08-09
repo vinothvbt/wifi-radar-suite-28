@@ -1,30 +1,31 @@
 #!/bin/bash
 
-# WiFi Security Radar Suite Launch Script
-# Automated launcher with dependency checking
+# WiFi Radar Suite Web Edition Launch Script
+# Automated launcher for the web-based WiFi security analysis tool
 
-echo "WiFi Security Radar Suite v5.0"
-echo "=================================="
+echo "WiFi Radar Suite - Web Edition"
+echo "=============================="
 
-# Check if running as root
+# Check if running as root (required for WiFi scanning)
 if [ "$EUID" -ne 0 ]; then
-    echo "Error: This application requires root privileges for WiFi scanning."
-    echo "Please run with sudo: sudo ./launch.sh"
-    exit 1
+    echo "Warning: WiFi scanning requires root privileges."
+    echo "Run with sudo for full functionality: sudo ./launch.sh"
+    echo "Or use capabilities: sudo setcap cap_net_raw,cap_net_admin+eip /usr/bin/python3"
+    echo ""
 fi
 
 # Check Python dependencies
-echo "Checking dependencies..."
+echo "Checking backend dependencies..."
 
 if ! command -v python3 &> /dev/null; then
     echo "Python3 not found. Please install Python3."
     exit 1
 fi
 
-if ! python3 -c "import PyQt5" &> /dev/null; then
-    echo "PyQt5 not found. Installing..."
-    apt update
-    apt install -y python3-pyqt5 python3-pyqt5-dev
+# Check if FastAPI is available
+if ! python3 -c "import fastapi, uvicorn, pydantic" &> /dev/null; then
+    echo "FastAPI dependencies not found. Installing..."
+    pip install fastapi uvicorn pydantic requests
 fi
 
 # Check wireless tools
@@ -33,12 +34,18 @@ if ! command -v iw &> /dev/null && ! command -v iwlist &> /dev/null; then
     apt install -y wireless-tools iw
 fi
 
-echo "Dependencies checked successfully!"
+echo "Backend dependencies checked successfully!"
 echo ""
 
-# Launch the main application
-echo "Launching WiFi Security Radar Suite..."
-python3 main_launcher.py
+# Check if we're in the right directory
+if [ ! -f "run.py" ]; then
+    echo "Error: run.py not found. Please run this script from the backend directory."
+    exit 1
+fi
 
+# Launch the FastAPI backend
+echo "Launching WiFi Radar Suite Backend..."
+echo "API will be available at: http://127.0.0.1:8000"
+echo "Frontend should be started separately with: npm run dev"
 echo ""
-echo "Thank you for using WiFi Security Radar Suite!"
+python3 run.py

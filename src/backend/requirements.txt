@@ -1,5 +1,5 @@
-PyQt5>=5.15.0
-requests>=2.25.0
+# Web-based WiFi Radar Suite Backend Dependencies
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 pydantic>=2.5.0
+requests>=2.25.0

@@ -129,7 +129,11 @@ wifi-radar-suite-28/
 │   │   └── api.ts               # Frontend API client
 │   ├── pages/                   # React pages/routes
 │   └── components/              # UI components
+├── e2e/                         # End-to-end tests
+│   ├── screenshots/             # Test screenshots
+│   └── scan.spec.ts            # Main workflow tests
 ├── package.json                 # Node.js dependencies and scripts
+├── playwright.config.ts         # Playwright test configuration
 ├── .env.example                 # Environment configuration template
 └── README.md                    # This file
 ```
@@ -148,6 +152,63 @@ wifi-radar-suite-28/
 - Pydantic for data validation
 - Uvicorn ASGI server
 - Async Python for performance
+
+### Testing
+
+#### Unit Testing
+Currently, no unit tests are implemented. The project focuses on end-to-end testing for comprehensive workflow validation.
+
+#### End-to-End (E2E) Testing
+The project uses Playwright for end-to-end testing of the complete user workflow:
+
+**Running UI Tests**:
+```bash
+# Run all E2E tests (headless)
+npm run test:ui
+
+# Run tests with browser visible (headed mode)
+npm run test:ui:headed
+
+# Debug tests with step-by-step interaction
+npm run test:ui:debug
+```
+
+**Test Coverage**:
+- Interface detection and selection
+- WiFi scan start/stop functionality
+- Network results display and interaction
+- Auto-refresh controls
+- Error handling (API disconnection)
+- Responsive design verification
+
+**Screenshots**:
+Tests automatically capture screenshots at key workflow steps:
+- `e2e/screenshots/01-initial-page-load.png` - Application startup
+- `e2e/screenshots/02-api-connection-status.png` - Backend connectivity
+- `e2e/screenshots/03-interface-selection.png` - Network interface selection
+- `e2e/screenshots/04-before-scan-start.png` - Pre-scan state
+- `e2e/screenshots/05-scan-running.png` - Active scanning state
+- `e2e/screenshots/06-scan-results-loaded.png` - Results display
+- `e2e/screenshots/07-auto-refresh-controls.png` - Auto-refresh UI
+- `e2e/screenshots/08-scan-stopped.png` - Scan completion
+- `e2e/screenshots/09-final-state.png` - Final application state
+
+Additional screenshots for error states and responsive design testing are also captured.
+
+**Test Configuration**:
+- Playwright configuration: `playwright.config.ts`
+- Main test suite: `e2e/scan.spec.ts`
+- Automatic frontend server startup for testing
+- Cross-browser testing support (currently Chrome/Chromium)
+
+**Viewing Test Results**:
+```bash
+# View HTML test report (after running tests)
+npx playwright show-report
+
+# View screenshots in e2e/screenshots/ directory
+ls -la e2e/screenshots/
+```
 
 ## Kali Linux Setup
 

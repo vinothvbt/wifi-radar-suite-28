@@ -39,3 +39,9 @@ venv.bak/
 src/backend/api/__pycache__/
 src/backend/api/routers/__pycache__/
 src/backend/api/services/__pycache__/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

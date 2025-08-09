@@ -279,7 +279,7 @@ class WiFiService:
     async def _scan_with_iw(self, interface: str) -> List[AccessPoint]:
         """Perform scan using iw command"""
         try:
-            cmd = ['sudo', 'iw', 'dev', interface, 'scan']
+            cmd = ['iw', 'dev', interface, 'scan']
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             
             if result.returncode == 0:

@@ -74,7 +74,7 @@ test.describe('WiFi Scanner Main Workflow', () => {
       await scanButton.click();
       
       // Wait for scanning state to appear
-      await expect(page.locator('text=Scanning...')).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('[data-testid="scanning-indicator"]')).toBeVisible({ timeout: 5000 });
       
       // Take screenshot during scan
       await page.screenshot({ 
